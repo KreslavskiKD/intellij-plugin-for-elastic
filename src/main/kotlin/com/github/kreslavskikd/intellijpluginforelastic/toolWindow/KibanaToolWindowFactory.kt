@@ -1,5 +1,7 @@
 package com.github.kreslavskikd.intellijpluginforelastic.toolWindow
 
+import com.github.kreslavskikd.intellijpluginforelastic.MyBundle
+import com.github.kreslavskikd.intellijpluginforelastic.services.KibanaProjectService
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
@@ -7,8 +9,7 @@ import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBPanel
 import com.intellij.ui.content.ContentFactory
-import com.github.kreslavskikd.intellijpluginforelastic.MyBundle
-import com.github.kreslavskikd.intellijpluginforelastic.services.KibanaProjectService
+import java.awt.BorderLayout
 import javax.swing.JButton
 
 
@@ -37,6 +38,13 @@ class KibanaToolWindowFactory : ToolWindowFactory {
                 }
             })
             add(label)
+            add(JButton(MyBundle.message("button_get_credentials")).apply {
+                addActionListener {
+                    if (CredentialsDialogWrapper().showAndGet()) {
+                        // user pressed OK
+                    }
+                }
+            }, BorderLayout.PAGE_END)
 
         }
     }
