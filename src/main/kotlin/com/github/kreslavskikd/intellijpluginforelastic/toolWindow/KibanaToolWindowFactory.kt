@@ -6,8 +6,8 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
-import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBPanel
+import com.intellij.ui.components.JBTextField
 import com.intellij.ui.content.ContentFactory
 import java.awt.BorderLayout
 import javax.swing.JButton
@@ -30,22 +30,18 @@ class KibanaToolWindowFactory : ToolWindowFactory {
         private val service = toolWindow.project.service<KibanaProjectService>()
 
         fun getContent() = JBPanel<JBPanel<*>>().apply {
-            val label = JBLabel(MyBundle.message("label", "?"))
+            val label = JBTextField(MyBundle.message("label", "?"))
 
-            add(JButton(MyBundle.message("button_send_request")).apply {
+            add(JButton(MyBundle.message("button_download_logs")).apply {
                 addActionListener {
-                    label.text = MyBundle.message("label", service.sendKibanaRequest())
+                    label.text = MyBundle.message("label", service.downloadLogs(
+                        baseUrl = "http://localhost:9200",
+                        outputDir = "./logs"
+                    ))
                 }
             })
-            add(label)
-            add(JButton(MyBundle.message("button_get_credentials")).apply {
-                addActionListener {
-                    if (CredentialsDialogWrapper().showAndGet()) {
-                        // user pressed OK
-                    }
-                }
-            }, BorderLayout.PAGE_END)
 
+            add(label)
         }
     }
 }
