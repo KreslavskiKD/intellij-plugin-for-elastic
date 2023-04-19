@@ -9,7 +9,6 @@ import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.components.JBPanel
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.content.ContentFactory
-import java.awt.BorderLayout
 import javax.swing.JButton
 
 
