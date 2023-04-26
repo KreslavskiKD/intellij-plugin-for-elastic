@@ -10,14 +10,13 @@ import java.util.*
 @Service(Service.Level.PROJECT)
 class KibanaProjectService(project: Project) {
 
-    fun downloadLogs(baseUrl: String, outputDir: String): String {
+    fun downloadLogs(baseUrl: String, outputDir: String, query: String): String {
         val endpoint = "/_search"
 
         val headers = mapOf("Content-Type" to "application/json")
-        val data = """{"query": {"match_all": {}}}"""
 
         try {
-            val response = khttp.get(baseUrl + endpoint, headers = headers, data = data)
+            val response = khttp.get(baseUrl + endpoint, headers = headers, data = query)
             File(outputDir).mkdirs()
             val outputFile = File("$outputDir/data.log")
             outputFile.writeText(response.text)

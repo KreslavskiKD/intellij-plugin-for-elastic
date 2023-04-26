@@ -1,6 +1,8 @@
 package com.github.kreslavskikd.intellijpluginforelastic.toolWindow
 
 import com.github.kreslavskikd.intellijpluginforelastic.MyBundle
+import com.github.kreslavskikd.intellijpluginforelastic.repo.Constants
+import com.github.kreslavskikd.intellijpluginforelastic.repo.InfoRepo
 import com.github.kreslavskikd.intellijpluginforelastic.services.KibanaProjectService
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
@@ -34,13 +36,22 @@ class KibanaToolWindowFactory : ToolWindowFactory {
             add(JButton(MyBundle.message("button_download_logs")).apply {
                 addActionListener {
                     label.text = MyBundle.message("label", service.downloadLogs(
-                        baseUrl = "http://localhost:9200",
-                        outputDir = "./logs"
+                        baseUrl = "${InfoRepo.elasticAddress}:${Constants.ELASTIC_PORT}",
+                        outputDir = InfoRepo.logsDir,
+                        query = InfoRepo.query,
                     ))
                 }
             })
 
             add(label)
+
+            add(JButton(MyBundle.message("button_get_info")).apply{
+                addActionListener {
+                    if (PreferencesDialogWrapper().showAndGet()) {
+                        // user pressed OK
+                    }
+                }
+            })
         }
     }
 }
