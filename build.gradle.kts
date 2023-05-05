@@ -25,6 +25,7 @@ version = properties("pluginVersion").get()
 // Configure project's dependencies
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
@@ -66,7 +67,21 @@ kover.xmlReport {
     onCheck.set(true)
 }
 
+
+val fatJar by tasks.register<Jar>("fatJar") {
+    manifest.from(tasks.jar.get().manifest)
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    // classifier = "all"
+    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) }) {
+        exclude("META-INF/*.SF")
+        exclude("META-INF/*.DSA")
+        exclude("META-INF/*.RSA")
+    }
+    with(tasks.jar.get())
+}
+
 tasks {
+
     wrapper {
         gradleVersion = properties("gradleVersion").get()
     }
