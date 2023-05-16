@@ -24,7 +24,6 @@ version = properties("pluginVersion").get()
 
 // Configure project's dependencies
 repositories {
-    mavenLocal()
     mavenCentral()
     maven("https://jitpack.io")
     jcenter()

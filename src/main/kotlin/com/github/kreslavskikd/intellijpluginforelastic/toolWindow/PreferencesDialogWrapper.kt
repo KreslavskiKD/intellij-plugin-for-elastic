@@ -1,40 +1,51 @@
 package com.github.kreslavskikd.intellijpluginforelastic.toolWindow
 import com.github.kreslavskikd.intellijpluginforelastic.repo.InfoRepo
 import com.intellij.openapi.ui.DialogWrapper
+import com.intellij.ui.layout.panel
 import javax.swing.*
 
 
 class PreferencesDialogWrapper : DialogWrapper(true) {
-    private var contentPane: JPanel
-    private var buttonOK: JButton
-    private var buttonCancel: JButton
-
-    private var addressField: JTextField
-    private var logsDirField: JTextField
-    private var queryField: JTextField
-
+    private val elasticAddressField = JTextField()
+    private val outputDirectoryField = JTextField()
+    private val queryBodyField = JTextArea()
 
     init {
-        init()
         title = "Preferences"
 
-        contentPane = JPanel()
-        buttonOK = JButton()
-        addressField = JTextField()
-        buttonCancel = JButton()
-        logsDirField = JTextField()
-        queryField = JTextField()
-        isModal = true
+        init()
     }
 
-    override fun createCenterPanel(): JComponent {
-        return contentPane
+    override fun createCenterPanel() = panel {
+        row("Your Elastic address") {
+            elasticAddressField(growX)
+        }
+        row("Output directory for logs") {
+            outputDirectoryField(growX)
+        }
+        row("Query body as JSON") {
+            queryBodyField(growX)
+        }
+    }
+
+    fun getElasticAddress(): String {
+        return elasticAddressField.text
+    }
+
+    fun getOutputDirectory(): String {
+        return outputDirectoryField.text
+    }
+
+    fun getQueryBody(): String {
+        return queryBodyField.text
     }
 
     override fun doOKAction() {
-        if (addressField.text != "") InfoRepo.elasticAddress = addressField.text
-        if (logsDirField.text != "") InfoRepo.logsDir = logsDirField.text
-        if (queryField.text != "") InfoRepo.query = queryField.text
+        InfoRepo.apply {
+            elasticAddress = getElasticAddress()
+            logsDir = getOutputDirectory()
+            query = getQueryBody()
+        }
         super.doOKAction()
     }
 }

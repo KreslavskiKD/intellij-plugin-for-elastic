@@ -8,6 +8,10 @@
 
     <resource-bundle>messages.MyBundle</resource-bundle>
 
+    <actions>
+        <action id="MyDialogAction" class="com.github.kreslavskikd.intellijpluginforelastic.actions.ShowDialogAction" text="Set up Elastic Preferences" description="Dialog to set up elastic address, directory for logs and specify query" />
+    </actions>
+
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow factoryClass="com.github.kreslavskikd.intellijpluginforelastic.toolWindow.KibanaToolWindowFactory" id="KibanaToolWindow"/>
     </extensions>
