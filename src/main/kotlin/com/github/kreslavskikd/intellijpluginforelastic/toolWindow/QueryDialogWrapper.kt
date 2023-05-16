@@ -1,9 +1,9 @@
 package com.github.kreslavskikd.intellijpluginforelastic.toolWindow
 
-import com.github.kreslavskikd.intellijpluginforelastic.MyBundle
+import com.github.kreslavskikd.intellijpluginforelastic.PluginBundle
 import com.github.kreslavskikd.intellijpluginforelastic.repo.Constants
 import com.github.kreslavskikd.intellijpluginforelastic.repo.InfoRepo
-import com.github.kreslavskikd.intellijpluginforelastic.services.KibanaProjectService
+import com.github.kreslavskikd.intellijpluginforelastic.services.ElasticProjectService
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
@@ -15,9 +15,9 @@ import javax.swing.JTextArea
 class QueryDialogWrapper(project: Project) : DialogWrapper(true) {
     private val queryBodyField = JTextArea()
     private var runQueryBtn = JButton()
-    private val statusLabel = JBTextField(MyBundle.message("label", "?"))
+    private val statusLabel = JBTextField(PluginBundle.message("label", "?"))
 
-    private val service = project.service<KibanaProjectService>()
+    private val service = project.service<ElasticProjectService>()
 
     init {
         title = "Query"
@@ -30,7 +30,7 @@ class QueryDialogWrapper(project: Project) : DialogWrapper(true) {
             queryBodyField(growX)
         }
         row("Run Query") {
-            button(MyBundle.message("button_download_logs")){
+            button(PluginBundle.message("button_download_logs")){
                 val result = service.downloadLogs(
                     baseUrl = "${InfoRepo.elasticAddress}:${Constants.ELASTIC_PORT}",
                     outputDir = InfoRepo.logsDir,

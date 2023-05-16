@@ -8,7 +8,7 @@ import java.io.File
 import java.util.*
 
 @Service(Service.Level.PROJECT)
-class KibanaProjectService(project: Project) {
+class ElasticProjectService(project: Project) {
 
     fun downloadLogs(baseUrl: String, outputDir: String, query: String): String {
         val endpoint = "/_search"

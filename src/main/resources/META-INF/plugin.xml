@@ -6,7 +6,7 @@
 
     <depends>com.intellij.modules.platform</depends>
 
-    <resource-bundle>messages.MyBundle</resource-bundle>
+    <resource-bundle>messages.PluginBundle</resource-bundle>
 
     <actions>
         <action id="PluginPreferencesDialogAction" class="com.github.kreslavskikd.intellijpluginforelastic.actions.ShowPreferencesDialogAction" text="Set up Elastic Preferences" description="Dialog to set up elastic address and specify directory for logs" />
@@ -14,10 +14,6 @@
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.kreslavskikd.intellijpluginforelastic.toolWindow.KibanaToolWindowFactory" id="KibanaToolWindow"/>
+        <toolWindow factoryClass="com.github.kreslavskikd.intellijpluginforelastic.toolWindow.ElasticToolWindowFactory" id="KibanaToolWindow"/>
     </extensions>
-
-    <applicationListeners>
-        <listener class="com.github.kreslavskikd.intellijpluginforelastic.listeners.MyFrameStateListener" topic="com.intellij.ide.FrameStateListener"/>
-    </applicationListeners>
 </idea-plugin>
