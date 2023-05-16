@@ -8,7 +8,6 @@ import javax.swing.*
 class PreferencesDialogWrapper : DialogWrapper(true) {
     private val elasticAddressField = JTextField()
     private val outputDirectoryField = JTextField()
-    private val queryBodyField = JTextArea()
 
     init {
         title = "Preferences"
@@ -23,9 +22,6 @@ class PreferencesDialogWrapper : DialogWrapper(true) {
         row("Output directory for logs") {
             outputDirectoryField(growX)
         }
-        row("Query body as JSON") {
-            queryBodyField(growX)
-        }
     }
 
     fun getElasticAddress(): String {
@@ -36,15 +32,10 @@ class PreferencesDialogWrapper : DialogWrapper(true) {
         return outputDirectoryField.text
     }
 
-    fun getQueryBody(): String {
-        return queryBodyField.text
-    }
-
     override fun doOKAction() {
         InfoRepo.apply {
             elasticAddress = getElasticAddress()
             logsDir = getOutputDirectory()
-            query = getQueryBody()
         }
         super.doOKAction()
     }

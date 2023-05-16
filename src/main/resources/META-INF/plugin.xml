@@ -9,7 +9,8 @@
     <resource-bundle>messages.MyBundle</resource-bundle>
 
     <actions>
-        <action id="MyDialogAction" class="com.github.kreslavskikd.intellijpluginforelastic.actions.ShowDialogAction" text="Set up Elastic Preferences" description="Dialog to set up elastic address, directory for logs and specify query" />
+        <action id="PluginPreferencesDialogAction" class="com.github.kreslavskikd.intellijpluginforelastic.actions.ShowPreferencesDialogAction" text="Set up Elastic Preferences" description="Dialog to set up elastic address and specify directory for logs" />
+        <action id="QueryDialogAction" class="com.github.kreslavskikd.intellijpluginforelastic.actions.ShowQueryDialogAction" text="Set up and Run Elastic Query" description="Dialog to set up and run elastic query" />
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">

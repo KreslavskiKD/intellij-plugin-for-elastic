@@ -12,6 +12,7 @@ import com.intellij.ui.components.JBPanel
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.content.ContentFactory
 import javax.swing.JButton
+import javax.swing.JTextArea
 
 
 class KibanaToolWindowFactory : ToolWindowFactory {
@@ -31,7 +32,7 @@ class KibanaToolWindowFactory : ToolWindowFactory {
         private val service = toolWindow.project.service<KibanaProjectService>()
 
         fun getContent() = JBPanel<JBPanel<*>>().apply {
-            val label = JBTextField(MyBundle.message("label", "?"))
+            val label = JTextArea()
 
             add(JButton(MyBundle.message("button_download_logs")).apply {
                 addActionListener {
@@ -43,8 +44,6 @@ class KibanaToolWindowFactory : ToolWindowFactory {
                 }
             })
 
-            add(label)
-
             add(JButton(MyBundle.message("button_get_info")).apply{
                 addActionListener {
                     if (PreferencesDialogWrapper().showAndGet()) {
@@ -52,6 +51,8 @@ class KibanaToolWindowFactory : ToolWindowFactory {
                     }
                 }
             })
+
+            add(label)
         }
     }
 }

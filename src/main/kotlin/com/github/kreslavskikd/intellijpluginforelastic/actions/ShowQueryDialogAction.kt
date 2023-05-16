@@ -1,23 +1,18 @@
 package com.github.kreslavskikd.intellijpluginforelastic.actions
 
 import com.github.kreslavskikd.intellijpluginforelastic.repo.InfoRepo
-import com.github.kreslavskikd.intellijpluginforelastic.toolWindow.PreferencesDialogWrapper
+import com.github.kreslavskikd.intellijpluginforelastic.toolWindow.QueryDialogWrapper
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 
-class ShowDialogAction : AnAction() {
+class ShowQueryDialogAction : AnAction(){
     override fun actionPerformed(e: AnActionEvent) {
-        val dialog = PreferencesDialogWrapper()
+        val dialog = QueryDialogWrapper(e.project!!)
         dialog.showAndGet()
 
-        // Access the entered values
-        val elasticAddressLoc = dialog.getElasticAddress()
-        val outputDirectory = dialog.getOutputDirectory()
         val queryBody = dialog.getQueryBody()
 
         InfoRepo.apply {
-            elasticAddress = elasticAddressLoc
-            logsDir = outputDirectory
             query = queryBody
         }
     }
