@@ -6,9 +6,18 @@ object InfoRepo {
 
     var logsDir: String = "./logs"
 
-    var query: String = """{"query": {"match_all": {}}}"""
+    var query: String = ""
+
+    var selectedQueryType = QueryType.QUERY_PARAMS
 }
 
 object Constants {
     const val ELASTIC_PORT = "9200"
+
+    const val queryBaseStart = """{"query": """
+    const val queryBaseEnd = "}}"
+}
+
+enum class QueryType {
+    QUERY_STRING, QUERY_PARAMS, JSON
 }

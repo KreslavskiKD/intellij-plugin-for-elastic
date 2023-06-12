@@ -26,7 +26,7 @@ class ElasticToolWindowFactory : ToolWindowFactory {
 
     override fun shouldBeAvailable(project: Project) = true
 
-    class ElasticToolWindow(toolWindow: ToolWindow) {
+    class ElasticToolWindow(private val toolWindow: ToolWindow) {
 
         private val service = toolWindow.project.service<ElasticProjectService>()
 
@@ -35,11 +35,9 @@ class ElasticToolWindowFactory : ToolWindowFactory {
 
             add(JButton(PluginBundle.message("button_download_logs")).apply {
                 addActionListener {
-                    label.text = PluginBundle.message("label", service.downloadLogs(
-                        baseUrl = "${InfoRepo.elasticAddress}:${Constants.ELASTIC_PORT}",
-                        outputDir = InfoRepo.logsDir,
-                        query = InfoRepo.query,
-                    ))
+                    if (QueryDialogWrapper(toolWindow.project).showAndGet()) {
+
+                    }
                 }
             })
 
