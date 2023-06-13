@@ -72,6 +72,7 @@ class ElasticProjectService(project: Project) {
             }
             QueryType.QUERY_STRING -> {
                 return try {
+                    con.doOutput = true
                     val out = DataOutputStream(con.outputStream)
                     out.writeBytes(query)
                     out.flush()
