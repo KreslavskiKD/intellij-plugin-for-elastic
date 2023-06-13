@@ -1,26 +1,38 @@
 package com.github.kreslavskikd.intellijpluginforelastic.toolWindow
+
 import com.github.kreslavskikd.intellijpluginforelastic.repo.InfoRepo
+import com.github.kreslavskikd.intellijpluginforelastic.util.Notifier
+import com.github.kreslavskikd.intellijpluginforelastic.util.isValidUrl
+import com.intellij.openapi.diagnostic.thisLogger
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
-import com.intellij.ui.layout.panel
+import com.intellij.ui.dsl.builder.panel
+import com.intellij.ui.dsl.gridLayout.HorizontalAlign
 import javax.swing.*
 
 
-class PreferencesDialogWrapper : DialogWrapper(true) {
+class PreferencesDialogWrapper(
+    private val project: Project,
+) : DialogWrapper(true) {
     private val elasticAddressField = JTextField()
     private val outputDirectoryField = JTextField()
 
     init {
         title = "Preferences"
+        elasticAddressField.text = InfoRepo.elasticAddress
+        outputDirectoryField.text = InfoRepo.logsDir
 
         init()
     }
 
     override fun createCenterPanel() = panel {
         row("Your Elastic address") {
-            elasticAddressField(growX)
+            cell(elasticAddressField)
+                .horizontalAlign(HorizontalAlign.RIGHT)
         }
         row("Output directory for logs") {
-            outputDirectoryField(growX)
+            cell(outputDirectoryField)
+                .horizontalAlign(HorizontalAlign.RIGHT)
         }
     }
 
@@ -34,7 +46,14 @@ class PreferencesDialogWrapper : DialogWrapper(true) {
 
     override fun doOKAction() {
         InfoRepo.apply {
-            elasticAddress = getElasticAddress()
+            val tempAddress = getElasticAddress()
+            if (isValidUrl(tempAddress)) {
+                elasticAddress = tempAddress
+                thisLogger().info("elasticAddress is now $elasticAddress")
+            } else {
+                Notifier.notifyError(project,"$tempAddress is not a valid URL")
+                return
+            }
             logsDir = getOutputDirectory()
         }
         super.doOKAction()

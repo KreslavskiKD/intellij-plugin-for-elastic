@@ -1,8 +1,6 @@
 package com.github.kreslavskikd.intellijpluginforelastic.toolWindow
 
 import com.github.kreslavskikd.intellijpluginforelastic.PluginBundle
-import com.github.kreslavskikd.intellijpluginforelastic.repo.Constants
-import com.github.kreslavskikd.intellijpluginforelastic.repo.InfoRepo
 import com.github.kreslavskikd.intellijpluginforelastic.services.ElasticProjectService
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
@@ -43,7 +41,7 @@ class ElasticToolWindowFactory : ToolWindowFactory {
 
             add(JButton(PluginBundle.message("button_get_info")).apply{
                 addActionListener {
-                    if (PreferencesDialogWrapper().showAndGet()) {
+                    if (PreferencesDialogWrapper(toolWindow.project).showAndGet()) {
                         // user pressed OK
                     }
                 }

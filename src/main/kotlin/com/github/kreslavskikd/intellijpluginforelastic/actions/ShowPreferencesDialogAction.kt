@@ -7,16 +7,16 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 
 class ShowPreferencesDialogAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
-        val dialog = PreferencesDialogWrapper()
-        dialog.showAndGet()
+        val dialog = e.project?.let { PreferencesDialogWrapper(it) }
+        dialog?.showAndGet()
 
         // Access the entered values
-        val elasticAddressLoc = dialog.getElasticAddress()
-        val outputDirectory = dialog.getOutputDirectory()
+        val elasticAddressLoc = dialog?.getElasticAddress()
+        val outputDirectory = dialog?.getOutputDirectory()
 
         InfoRepo.apply {
-            elasticAddress = elasticAddressLoc
-            logsDir = outputDirectory
+            elasticAddress = elasticAddressLoc ?: elasticAddress
+            logsDir = outputDirectory ?: logsDir
         }
     }
 }

@@ -16,4 +16,8 @@
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow factoryClass="com.github.kreslavskikd.intellijpluginforelastic.toolWindow.ElasticToolWindowFactory" id="KibanaToolWindow"/>
     </extensions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <notificationGroup id="Custom Notification Group" displayType="BALLOON"/>
+    </extensions>
 </idea-plugin>
