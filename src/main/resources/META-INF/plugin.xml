@@ -1,7 +1,8 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <id>com.github.kreslavskikd.intellijpluginforelastic</id>
-    <name>intellij-plugin-for-elastic</name>
+    <name>Elasticsearch Logs Downloader</name>
+
     <vendor>kreslavskikd</vendor>
 
     <depends>com.intellij.modules.platform</depends>
@@ -9,15 +10,26 @@
     <resource-bundle>messages.PluginBundle</resource-bundle>
 
     <actions>
-        <action id="PluginPreferencesDialogAction" class="com.github.kreslavskikd.intellijpluginforelastic.actions.ShowPreferencesDialogAction" text="Set up Elastic Preferences" description="Dialog to set up elastic address and specify directory for logs" />
-        <action id="QueryDialogAction" class="com.github.kreslavskikd.intellijpluginforelastic.actions.ShowQueryDialogAction" text="Set up and Run Elastic Query" description="Dialog to set up and run elastic query" />
+        <action id="PluginPreferencesDialogAction"
+                class="com.github.kreslavskikd.intellijpluginforelastic.actions.ShowPreferencesDialogAction"
+                text="Set up Elastic Preferences"
+                description="Dialog to set up elastic address and specify directory for logs" />
+        <action id="QueryDialogAction"
+                class="com.github.kreslavskikd.intellijpluginforelastic.actions.ShowQueryDialogAction"
+                text="Set up and Run Elastic Query"
+                description="Dialog to set up and run elastic query" />
+        <action id="com.github.kreslavskikd.intellijpluginforelastic.actions.OpenLogFileAction"
+                class="com.github.kreslavskikd.intellijpluginforelastic.actions.OpenLogFileAction"
+                text="Open Log File"
+                description="Opens .log file as a scratch file"/>
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.kreslavskikd.intellijpluginforelastic.toolWindow.ElasticToolWindowFactory" id="KibanaToolWindow"/>
-    </extensions>
-
-    <extensions defaultExtensionNs="com.intellij">
-        <notificationGroup id="Custom Notification Group" displayType="BALLOON"/>
+        <toolWindow
+                factoryClass="com.github.kreslavskikd.intellijpluginforelastic.toolWindow.ElasticToolWindowFactory"
+                id="ElasticToolWindow"/>
+        <notificationGroup
+                id="Elastic-plugin group"
+                displayType="BALLOON"/>
     </extensions>
 </idea-plugin>

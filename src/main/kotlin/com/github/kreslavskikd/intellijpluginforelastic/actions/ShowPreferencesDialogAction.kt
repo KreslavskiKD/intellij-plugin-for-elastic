@@ -1,7 +1,7 @@
 package com.github.kreslavskikd.intellijpluginforelastic.actions
 
 import com.github.kreslavskikd.intellijpluginforelastic.repo.InfoRepo
-import com.github.kreslavskikd.intellijpluginforelastic.toolWindow.PreferencesDialogWrapper
+import com.github.kreslavskikd.intellijpluginforelastic.dialogs.PreferencesDialogWrapper
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 

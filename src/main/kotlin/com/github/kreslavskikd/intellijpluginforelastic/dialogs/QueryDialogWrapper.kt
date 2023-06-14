@@ -1,9 +1,10 @@
-package com.github.kreslavskikd.intellijpluginforelastic.toolWindow
+package com.github.kreslavskikd.intellijpluginforelastic.dialogs
 
 import com.github.kreslavskikd.intellijpluginforelastic.PluginBundle
 import com.github.kreslavskikd.intellijpluginforelastic.repo.Constants
 import com.github.kreslavskikd.intellijpluginforelastic.repo.InfoRepo
 import com.github.kreslavskikd.intellijpluginforelastic.repo.QueryType
+import com.github.kreslavskikd.intellijpluginforelastic.repo.Settings
 import com.github.kreslavskikd.intellijpluginforelastic.services.ElasticProjectService
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
@@ -38,7 +39,7 @@ class QueryDialogWrapper(project: Project) : DialogWrapper(true) {
             row {
                 radioButton("Query body as JSON", QueryType.JSON)
             }
-        }.bind (MutableProperty({InfoRepo.selectedQueryType }, {InfoRepo.selectedQueryType = it} ), QueryType::class.java)
+        }.bind (MutableProperty({ Settings.selectedQueryType }, { Settings.selectedQueryType = it } ), QueryType::class.java)
 
         row("Query body") {
             cell(queryBodyField)
@@ -52,7 +53,7 @@ class QueryDialogWrapper(project: Project) : DialogWrapper(true) {
         row("Run Query") {
             button(PluginBundle.message("button_download_logs")){
 
-                val prepareQuery = if (InfoRepo.selectedQueryType == QueryType.JSON) {
+                val prepareQuery = if (Settings.selectedQueryType == QueryType.JSON) {
                     Constants.queryBaseStart + InfoRepo.query + Constants.queryBaseEnd
                 } else {
                     InfoRepo.query
@@ -61,8 +62,11 @@ class QueryDialogWrapper(project: Project) : DialogWrapper(true) {
                     baseUrl = "${InfoRepo.elasticAddress}:${Constants.ELASTIC_PORT}",
                     outputDir = InfoRepo.logsDir,
                     query = prepareQuery,
-                    queryType = InfoRepo.selectedQueryType
+                    queryType = Settings.selectedQueryType
                 )
+
+                InfoRepo.lastResult = result
+
                 if (!result.startsWith("failed")) {
                     statusLabel.text = "Done"
                 } else {

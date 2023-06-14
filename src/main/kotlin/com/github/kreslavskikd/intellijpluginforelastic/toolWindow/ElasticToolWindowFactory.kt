@@ -1,6 +1,8 @@
 package com.github.kreslavskikd.intellijpluginforelastic.toolWindow
 
 import com.github.kreslavskikd.intellijpluginforelastic.PluginBundle
+import com.github.kreslavskikd.intellijpluginforelastic.dialogs.PreferencesDialogWrapper
+import com.github.kreslavskikd.intellijpluginforelastic.dialogs.QueryDialogWrapper
 import com.github.kreslavskikd.intellijpluginforelastic.services.ElasticProjectService
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project

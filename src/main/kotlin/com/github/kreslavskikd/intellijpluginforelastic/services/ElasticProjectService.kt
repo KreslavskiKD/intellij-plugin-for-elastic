@@ -12,7 +12,7 @@ import java.util.*
 
 
 @Service(Service.Level.PROJECT)
-class ElasticProjectService(project: Project) {
+class ElasticProjectService(private val project: Project) {
 
     fun downloadLogs(baseUrl: String, outputDir: String, query: String, queryType: QueryType): String {
         val endpoint = "/_search"
@@ -106,10 +106,10 @@ class ElasticProjectService(project: Project) {
             QueryType.JSON -> { // todo rewrite without khttp usage
                 return try {
                     val response = khttp.get(baseUrl + endpoint, headers = headers, data = query)
-                    File(outputDir).mkdirs()
-                    val outputFile = File("$outputDir/data.log")
-                    outputFile.writeText(response.text)
-                    thisLogger().info("data logs stored to: " + outputFile.absolutePath)
+//                    File(outputDir).mkdirs()
+//                    val outputFile = File("$outputDir/data.log")
+//                    outputFile.writeText(response.text)
+//                    thisLogger().info("data logs stored to: " + outputFile.absolutePath)
                     response.text
                 } catch (e: Exception) {
                     thisLogger().warn("failed to load data:")
@@ -119,9 +119,9 @@ class ElasticProjectService(project: Project) {
                 }
             }
         }
+    }
 
-
-
+    fun createScratchLogFile(text: String) {
 
     }
 }
