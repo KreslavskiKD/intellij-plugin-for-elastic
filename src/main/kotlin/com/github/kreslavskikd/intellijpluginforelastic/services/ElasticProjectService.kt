@@ -106,10 +106,7 @@ class ElasticProjectService(private val project: Project) {
             QueryType.JSON -> { // todo rewrite without khttp usage
                 return try {
                     val response = khttp.get(baseUrl + endpoint, headers = headers, data = query)
-//                    File(outputDir).mkdirs()
-//                    val outputFile = File("$outputDir/data.log")
-//                    outputFile.writeText(response.text)
-//                    thisLogger().info("data logs stored to: " + outputFile.absolutePath)
+
                     response.text
                 } catch (e: Exception) {
                     thisLogger().warn("failed to load data:")

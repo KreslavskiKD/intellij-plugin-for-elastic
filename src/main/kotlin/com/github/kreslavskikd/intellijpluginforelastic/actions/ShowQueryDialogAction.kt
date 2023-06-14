@@ -2,6 +2,8 @@ package com.github.kreslavskikd.intellijpluginforelastic.actions
 
 import com.github.kreslavskikd.intellijpluginforelastic.dialogs.QueryDialogWrapper
 import com.github.kreslavskikd.intellijpluginforelastic.repo.InfoRepo
+import com.github.kreslavskikd.intellijpluginforelastic.repo.SavingLogsType
+import com.github.kreslavskikd.intellijpluginforelastic.repo.Settings
 import com.intellij.featureStatistics.FeatureUsageTracker
 import com.intellij.ide.scratch.LRUPopupBuilder
 import com.intellij.ide.scratch.ScratchFileCreationHelper
@@ -14,6 +16,7 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.actionSystem.LangDataKeys
+import com.intellij.openapi.diagnostic.thisLogger
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.util.text.StringUtil
@@ -23,6 +26,7 @@ import com.intellij.psi.util.PsiUtilCore
 import com.intellij.util.ArrayUtil
 import com.intellij.util.Consumer
 import org.jetbrains.annotations.NotNull
+import java.io.File
 import java.util.*
 
 class ShowQueryDialogAction : AnAction() {
@@ -30,25 +34,33 @@ class ShowQueryDialogAction : AnAction() {
         val dialog = QueryDialogWrapper(e.project!!)
         dialog.showAndGet()
 
-        val project = e.project ?: return
-        val context = createContext(e, project)
-        val consumer = Consumer { l: Language? ->
-            context.language = l
-            ScratchFileCreationHelper.EXTENSION.forLanguage(context.language).prepareText(
-                project, context, DataContext.EMPTY_CONTEXT
-            )
-            doCreateNewScratch(project, context)
-        }
+        if (Settings.savingLogsType == SavingLogsType.FILE_IN_DIR) {
+            File(InfoRepo.logsDir).mkdirs()
+            val outputFile = File("${InfoRepo.logsDir}/data.log")
+            outputFile.writeText(InfoRepo.lastResult)
+            thisLogger().info("data logs stored to: " + outputFile.absolutePath)
+        } else if (Settings.savingLogsType == SavingLogsType.SCRATCH_FILE) {
 
-        if (context.language != null) {
-            consumer.consume(context.language)
-        } else {
-            LRUPopupBuilder.forFileLanguages(
-                project,
-                ActionsBundle.message("action.NewScratchFile.text.with.new"),
-                null,
-                consumer
-            ).showCenteredInCurrentWindow(project)
+            val project = e.project ?: return
+            val context = createContext(e, project)
+            val consumer = Consumer { l: Language? ->
+                context.language = l
+                ScratchFileCreationHelper.EXTENSION.forLanguage(context.language).prepareText(
+                    project, context, DataContext.EMPTY_CONTEXT
+                )
+                doCreateNewScratch(project, context)
+            }
+
+            if (context.language != null) {
+                consumer.consume(context.language)
+            } else {
+                LRUPopupBuilder.forFileLanguages(
+                    project,
+                    ActionsBundle.message("action.NewScratchFile.text.with.new"),
+                    null,
+                    consumer
+                ).showCenteredInCurrentWindow(project)
+            }
         }
     }
 
