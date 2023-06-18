@@ -7,7 +7,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
-import com.intellij.ui.components.JBTextField
+import com.intellij.ui.components.JBTextArea
 import com.intellij.ui.dsl.builder.MutableProperty
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.dsl.gridLayout.HorizontalAlign
@@ -15,7 +15,7 @@ import javax.swing.JTextArea
 
 class QueryDialogWrapper(project: Project, private val event: AnActionEvent) : DialogWrapper(true) {
     private val queryBodyField = JTextArea()
-    private val statusLabel = JBTextField(PluginBundle.message("label", "?"))
+    private val statusLabel = JBTextArea(PluginBundle.message("label", "?"))
 
     private val service = project.service<ElasticProjectService>()
 
@@ -77,13 +77,7 @@ class QueryDialogWrapper(project: Project, private val event: AnActionEvent) : D
                     event = event,
                 )
 
-                InfoRepo.lastResult = result
-
-                if (!result.startsWith("failed")) {
-                    statusLabel.text = "Done"
-                } else {
-                    statusLabel.text = "Error occurred"
-                }
+                statusLabel.text = result
             }
         }
         row("Status") {

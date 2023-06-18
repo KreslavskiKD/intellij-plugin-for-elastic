@@ -169,8 +169,6 @@ class ElasticProjectService(private val project: Project) {
             thisLogger().info("directoryPath: " + outputFile)
             Files.createFile(outputFile)
 
-            Files.write(outputFile, InfoRepo.lastResult.toByteArray(StandardCharsets.UTF_8))
-
             val bufferedWriter = Files.newBufferedWriter(outputFile, StandardCharsets.UTF_8, )
 
             var inputLine: String?

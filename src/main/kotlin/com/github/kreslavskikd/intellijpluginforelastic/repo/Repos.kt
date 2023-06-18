@@ -3,8 +3,6 @@ package com.github.kreslavskikd.intellijpluginforelastic.repo
 object InfoRepo {
     var query: String = ""
 
-    var lastResult: String = ""
-
     var selectedQueryType = QueryType.QUERY_PARAMS
     var savingLogsType = SavingLogsType.FILE_IN_DIR
 }
