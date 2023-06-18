@@ -3,6 +3,7 @@ package com.github.kreslavskikd.intellijpluginforelastic.dialogs
 import com.github.kreslavskikd.intellijpluginforelastic.PluginBundle
 import com.github.kreslavskikd.intellijpluginforelastic.repo.*
 import com.github.kreslavskikd.intellijpluginforelastic.services.ElasticProjectService
+import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
@@ -12,7 +13,7 @@ import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.dsl.gridLayout.HorizontalAlign
 import javax.swing.JTextArea
 
-class QueryDialogWrapper(project: Project) : DialogWrapper(true) {
+class QueryDialogWrapper(project: Project, private val event: AnActionEvent) : DialogWrapper(true) {
     private val queryBodyField = JTextArea()
     private val statusLabel = JBTextField(PluginBundle.message("label", "?"))
 
@@ -68,11 +69,12 @@ class QueryDialogWrapper(project: Project) : DialogWrapper(true) {
 
                 val settings = PluginSettings.getInstance().state
 
-                val result = service.downloadLogs(
+                val result = service.downloadLogsAndStore(
                     baseUrl = "${settings.elasticAddress}:${Constants.ELASTIC_PORT}",
-                    outputDir = settings.logsDirectory,
+                    howToSave = InfoRepo.savingLogsType,
                     query = prepareQuery,
-                    queryType = InfoRepo.selectedQueryType
+                    queryType = InfoRepo.selectedQueryType,
+                    event = event,
                 )
 
                 InfoRepo.lastResult = result
