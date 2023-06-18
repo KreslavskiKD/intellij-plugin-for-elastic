@@ -11,6 +11,8 @@ import com.intellij.ide.scratch.ScratchFileService
 import com.intellij.ide.scratch.ScratchRootType
 import com.intellij.ide.util.PsiNavigationSupport
 import com.intellij.idea.ActionsBundle
+import com.intellij.ideolog.fileType.LogFileType
+import com.intellij.ideolog.fileType.LogLanguage
 import com.intellij.lang.Language
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
@@ -69,9 +71,9 @@ class ShowQueryDialogAction : AnAction() {
         val context = ScratchFileCreationHelper.Context()
         context.text = StringUtil.notNullize(InfoRepo.lastResult)
         // todo fix
-//        if (context.text.isNotEmpty()) {
-//            context.language = LogLanguage
-//        }
+        if (context.text.isNotEmpty()) {
+            context.language = LogLanguage
+        }
         context.ideView = e.getData(LangDataKeys.IDE_VIEW)
         return context
     }
@@ -79,10 +81,10 @@ class ShowQueryDialogAction : AnAction() {
     private fun doCreateNewScratch(project: Project, context: ScratchFileCreationHelper.Context): PsiFile? {
         FeatureUsageTracker.getInstance().triggerFeatureUsed("scratch")
         val language = Objects.requireNonNull(context.language)
-//        if (context.fileExtension == null) {
-//            val fileType = LogFileType
-//            context.fileExtension = fileType.defaultExtension
-//        }
+        if (context.fileExtension == null) {
+            val fileType = LogFileType
+            context.fileExtension = fileType.defaultExtension
+        }
         ScratchFileCreationHelper.EXTENSION.forLanguage(language).beforeCreate(project, context)
         val dir =
             if (context.ideView != null) PsiUtilCore.getVirtualFile(ArrayUtil.getFirstElement(context.ideView.directories)) else null
