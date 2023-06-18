@@ -95,7 +95,7 @@ class ElasticProjectService(private val project: Project) {
                     storeData(howToSave, event, responseStream)
 
                     responseStream.close()
-                    return "success"
+                    "success"
                 } catch (e: Exception) {
                     thisLogger().warn("failed to load data:")
                     e.cause?.let { thisLogger().warn(it) }
@@ -126,7 +126,7 @@ class ElasticProjectService(private val project: Project) {
                     storeData(howToSave, event, responseStream)
 
                     responseStream.close()
-                    return "success"
+                    "success"
                 } catch (e : Exception) {
                     thisLogger().warn("failed to load data:")
                     e.cause?.let { thisLogger().warn(it) }
@@ -140,7 +140,18 @@ class ElasticProjectService(private val project: Project) {
                 return try {
                     val response = khttp.get(baseUrl + endpoint, headers = headers, data = query)
 
-                    response.text
+                    val streamReader = if (response.statusCode > 299) {
+                        InputStreamReader(response.connection.errorStream)
+                    } else {
+                        InputStreamReader(response.connection.inputStream)
+                    }
+
+                    val responseStream = BufferedReader(
+                        streamReader
+                    )
+
+                    storeData(howToSave, event, responseStream)
+                    "success"
                 } catch (e: Exception) {
                     thisLogger().warn("failed to load data:")
                     e.cause?.let { thisLogger().warn(it) }
@@ -161,12 +172,10 @@ class ElasticProjectService(private val project: Project) {
             val current = LocalDateTime.now().format(formatter)
             val rootPath = Paths.get("/").toAbsolutePath()
             val directoryPath = Paths.get(e.project!!.basePath + File.separator + settings.logsDirectory).normalize()
-            thisLogger().info("directoryPath: " + directoryPath)
             if (Files.notExists(rootPath.resolve(directoryPath))) {
                 Files.createDirectory(rootPath.resolve(directoryPath))
             }
             val outputFile = Paths.get(e.project!!.basePath + File.separator + settings.logsDirectory + File.separator + "elastic-$current-data.log").normalize()
-            thisLogger().info("directoryPath: " + outputFile)
             Files.createFile(outputFile)
 
             val bufferedWriter = Files.newBufferedWriter(outputFile, StandardCharsets.UTF_8, )
