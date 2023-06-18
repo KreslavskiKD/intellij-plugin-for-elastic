@@ -54,13 +54,15 @@ class ElasticProjectService(private val project: Project) {
                     val responseStream = BufferedReader(
                         streamReader
                     )
-                    var inputLine = ""
+                    var inputLine: String?
                     val content = StringBuffer()
-                    while (responseStream.readLine().also { inputLine = it } != null) {
+                    inputLine = responseStream.readLine()
+                    while (inputLine != null) {
                         content.append(inputLine)
+                        inputLine = responseStream.readLine()
                     }
                     responseStream.close()
-                    content.toString()
+                    return content.toString()
                 } catch (e: Exception) {
                     thisLogger().warn("failed to load data:")
                     e.cause?.let { thisLogger().warn(it) }
@@ -87,13 +89,15 @@ class ElasticProjectService(private val project: Project) {
                     val responseStream = BufferedReader(
                         streamReader
                     )
-                    var inputLine = ""
+                    var inputLine: String?
                     val content = StringBuffer()
-                    while (responseStream.readLine().also { inputLine = it } != null) {
+                    inputLine = responseStream.readLine()
+                    while (inputLine != null) {
                         content.append(inputLine)
+                        inputLine = responseStream.readLine()
                     }
                     responseStream.close()
-                    content.toString()
+                    return content.toString()
                 } catch (e : Exception) {
                     thisLogger().warn("failed to load data:")
                     e.cause?.let { thisLogger().warn(it) }
@@ -103,7 +107,7 @@ class ElasticProjectService(private val project: Project) {
                     con.disconnect();
                 }
             }
-            QueryType.JSON -> { // todo rewrite without khttp usage
+            QueryType.JSON -> { // todo rewrite without khttp usage if possible
                 return try {
                     val response = khttp.get(baseUrl + endpoint, headers = headers, data = query)
 
@@ -116,9 +120,5 @@ class ElasticProjectService(private val project: Project) {
                 }
             }
         }
-    }
-
-    fun createScratchLogFile(text: String) {
-
     }
 }

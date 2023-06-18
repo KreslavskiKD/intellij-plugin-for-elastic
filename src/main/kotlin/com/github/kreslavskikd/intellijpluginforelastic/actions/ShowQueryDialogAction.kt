@@ -49,7 +49,7 @@ class ShowQueryDialogAction : AnAction() {
         if (InfoRepo.savingLogsType == SavingLogsType.FILE_IN_DIR) {
             val settings = PluginSettings.getInstance().state
             File(settings.logsDirectory).mkdirs()
-            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss")
             val current = LocalDateTime.now().format(formatter)
             val rootPath = Paths.get("/").toAbsolutePath()
             val directoryPath = Paths.get(e.project!!.basePath + File.separator + settings.logsDirectory).normalize()
@@ -113,7 +113,7 @@ class ShowQueryDialogAction : AnAction() {
         val relativePath = (if (rootType !== ScratchRootType.getInstance()) "" else FileUtil.getRelativePath(
             ScratchFileService.getInstance().getRootPath(rootType), dir!!.path, '/'
         ))!!
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss")
         val current = LocalDateTime.now().format(formatter)
         val fileName = (if (StringUtil.isEmpty(relativePath)) "" else "$relativePath/") + "elastic-$current-data.log"
         val file = ScratchRootType.getInstance().createScratchFile(

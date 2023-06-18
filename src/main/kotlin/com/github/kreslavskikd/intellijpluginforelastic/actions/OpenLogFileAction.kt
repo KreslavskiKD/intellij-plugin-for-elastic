@@ -69,7 +69,7 @@ class OpenLogFileAction : ScratchFileActions.NewFileAction() {
         val dir = if (context.ideView != null) PsiUtilCore.getVirtualFile(ArrayUtil.getFirstElement(context.ideView.directories)) else null
         val rootType = if (dir == null) null else ScratchFileService.findRootType(dir)
         val relativePath = (if (rootType !== ScratchRootType.getInstance()) "" else FileUtil.getRelativePath(ScratchFileService.getInstance().getRootPath(rootType), dir!!.path, '/'))!!
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss")
         val current = LocalDateTime.now().format(formatter)
         val fileName = (if (StringUtil.isEmpty(relativePath)) "" else "$relativePath/") + "$current-data.log"
         val file = ScratchRootType.getInstance().createScratchFile(
