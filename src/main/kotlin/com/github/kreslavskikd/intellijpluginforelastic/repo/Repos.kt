@@ -1,17 +1,10 @@
 package com.github.kreslavskikd.intellijpluginforelastic.repo
 
 object InfoRepo {
-
-    var elasticAddress: String = "http://localhost"
-
-    var logsDir: String = "./logs"
-
     var query: String = ""
 
     var lastResult: String = ""
-}
 
-object Settings {
     var selectedQueryType = QueryType.QUERY_PARAMS
     var savingLogsType = SavingLogsType.FILE_IN_DIR
 }
@@ -21,6 +14,9 @@ object Constants {
 
     const val queryBaseStart = """{"query": """
     const val queryBaseEnd = "}"
+
+    const val DEFAULT_ADDRESS: String = "http://localhost"
+    const val DEFAULT_LOGS_DIR: String = "./logs"
 }
 
 enum class QueryType {

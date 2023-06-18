@@ -36,7 +36,7 @@ class QueryDialogWrapper(project: Project) : DialogWrapper(true) {
             row {
                 radioButton("Query body as JSON", QueryType.JSON)
             }
-        }.bind (MutableProperty({ Settings.selectedQueryType }, { Settings.selectedQueryType = it } ), QueryType::class.java)
+        }.bind (MutableProperty({ InfoRepo.selectedQueryType }, { InfoRepo.selectedQueryType = it } ), QueryType::class.java)
 
         row("Query body") {
             cell(queryBodyField)
@@ -55,21 +55,24 @@ class QueryDialogWrapper(project: Project) : DialogWrapper(true) {
             row {
                 radioButton("In logs directory", SavingLogsType.FILE_IN_DIR)
             }
-        }.bind (MutableProperty({ Settings.savingLogsType }, { Settings.savingLogsType = it} ), SavingLogsType::class.java)
+        }.bind (MutableProperty({ InfoRepo.savingLogsType }, { InfoRepo.savingLogsType = it} ), SavingLogsType::class.java)
 
         row("Run Query") {
             button(PluginBundle.message("button_download_logs")){
 
-                val prepareQuery = if (Settings.selectedQueryType == QueryType.JSON) {
+                val prepareQuery = if (InfoRepo.selectedQueryType == QueryType.JSON) {
                     Constants.queryBaseStart + InfoRepo.query + Constants.queryBaseEnd
                 } else {
                     InfoRepo.query
                 }
+
+                val settings = PluginSettings.getInstance().state
+
                 val result = service.downloadLogs(
-                    baseUrl = "${InfoRepo.elasticAddress}:${Constants.ELASTIC_PORT}",
-                    outputDir = InfoRepo.logsDir,
+                    baseUrl = "${settings.elasticAddress}:${Constants.ELASTIC_PORT}",
+                    outputDir = settings.logsDirectory,
                     query = prepareQuery,
-                    queryType = Settings.selectedQueryType
+                    queryType = InfoRepo.selectedQueryType
                 )
 
                 InfoRepo.lastResult = result

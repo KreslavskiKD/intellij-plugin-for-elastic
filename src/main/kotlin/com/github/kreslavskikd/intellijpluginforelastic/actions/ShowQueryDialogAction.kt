@@ -2,8 +2,8 @@ package com.github.kreslavskikd.intellijpluginforelastic.actions
 
 import com.github.kreslavskikd.intellijpluginforelastic.dialogs.QueryDialogWrapper
 import com.github.kreslavskikd.intellijpluginforelastic.repo.InfoRepo
+import com.github.kreslavskikd.intellijpluginforelastic.repo.PluginSettings
 import com.github.kreslavskikd.intellijpluginforelastic.repo.SavingLogsType
-import com.github.kreslavskikd.intellijpluginforelastic.repo.Settings
 import com.intellij.featureStatistics.FeatureUsageTracker
 import com.intellij.ide.scratch.LRUPopupBuilder
 import com.intellij.ide.scratch.ScratchFileCreationHelper
@@ -46,22 +46,23 @@ class ShowQueryDialogAction : AnAction() {
         val dialog = QueryDialogWrapper(e.project!!)
         dialog.showAndGet()
 
-        if (Settings.savingLogsType == SavingLogsType.FILE_IN_DIR) {
-            File(InfoRepo.logsDir).mkdirs()
+        if (InfoRepo.savingLogsType == SavingLogsType.FILE_IN_DIR) {
+            val settings = PluginSettings.getInstance().state
+            File(settings.logsDirectory).mkdirs()
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")
             val current = LocalDateTime.now().format(formatter)
             val rootPath = Paths.get("/").toAbsolutePath()
-            val directoryPath = Paths.get(e.project!!.basePath + File.separator + InfoRepo.logsDir).normalize()
+            val directoryPath = Paths.get(e.project!!.basePath + File.separator + settings.logsDirectory).normalize()
             thisLogger().info("directoryPath: " + directoryPath)
             if (Files.notExists(rootPath.resolve(directoryPath))) {
                 Files.createDirectory(rootPath.resolve(directoryPath))
             }
-            val outputFile = Paths.get(e.project!!.basePath + File.separator + InfoRepo.logsDir + File.separator + "elastic-$current-data.log").normalize()
+            val outputFile = Paths.get(e.project!!.basePath + File.separator + settings.logsDirectory + File.separator + "elastic-$current-data.log").normalize()
             thisLogger().info("directoryPath: " + outputFile)
             Files.createFile(outputFile)
             Files.write(outputFile, InfoRepo.lastResult.toByteArray(StandardCharsets.UTF_8))
             thisLogger().info("data logs stored to: " + outputFile.absolutePathString())
-        } else if (Settings.savingLogsType == SavingLogsType.SCRATCH_FILE) {
+        } else if (InfoRepo.savingLogsType == SavingLogsType.SCRATCH_FILE) {
 
             val project = e.project ?: return
             val context = createContext(e, project)

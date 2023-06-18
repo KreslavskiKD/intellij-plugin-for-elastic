@@ -29,5 +29,10 @@
         <notificationGroup
                 id="Elastic-plugin group"
                 displayType="BALLOON"/>
+        <applicationConfigurable
+                parentId="tools"
+                instance="com.github.kreslavskikd.intellijpluginforelastic.settings.PluginSettingsConfigurable"
+                id="com.github.kreslavskikd.intellijpluginforelastic.settings.PluginSettingsConfigurable"
+                displayName="Elastic Logs Downloader Settings"/>
     </extensions>
 </idea-plugin>

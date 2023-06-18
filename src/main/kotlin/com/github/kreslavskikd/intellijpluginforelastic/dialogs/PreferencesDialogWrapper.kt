@@ -1,14 +1,11 @@
 package com.github.kreslavskikd.intellijpluginforelastic.dialogs
 
-import com.github.kreslavskikd.intellijpluginforelastic.repo.InfoRepo
-import com.github.kreslavskikd.intellijpluginforelastic.repo.SavingLogsType
-import com.github.kreslavskikd.intellijpluginforelastic.repo.Settings
+import com.github.kreslavskikd.intellijpluginforelastic.repo.PluginSettings
 import com.github.kreslavskikd.intellijpluginforelastic.util.Notifier
 import com.github.kreslavskikd.intellijpluginforelastic.util.isValidUrl
 import com.intellij.openapi.diagnostic.thisLogger
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
-import com.intellij.ui.dsl.builder.MutableProperty
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.dsl.gridLayout.HorizontalAlign
 import javax.swing.*
@@ -22,8 +19,10 @@ class PreferencesDialogWrapper(
 
     init {
         title = "Preferences"
-        elasticAddressField.text = InfoRepo.elasticAddress
-        outputDirectoryField.text = InfoRepo.logsDir
+        val curState = PluginSettings.getInstance().state
+
+        elasticAddressField.text = curState.elasticAddress
+        outputDirectoryField.text = curState.logsDirectory
 
         init()
     }
@@ -49,17 +48,25 @@ class PreferencesDialogWrapper(
     }
 
     override fun doOKAction() {
-        InfoRepo.apply {
-            val tempAddress = getElasticAddress()
-            if (isValidUrl(tempAddress)) {
-                elasticAddress = tempAddress
-                thisLogger().info("elasticAddress is now $elasticAddress")
-            } else {
-                Notifier.notifyError(project,"$tempAddress is not a valid URL")
-                return
-            }
-            logsDir = getOutputDirectory()
+        val settings = PluginSettings.getInstance()
+
+        val tempAddr: String
+
+        val tempAddress = getElasticAddress()
+        if (isValidUrl(tempAddress)) {
+            tempAddr = tempAddress
+            thisLogger().info("elasticAddress is now $tempAddr")
+        } else {
+            Notifier.notifyError(project,"$tempAddress is not a valid URL")
+            return
         }
+        val tempLD: String = getOutputDirectory()
+
+        settings.loadState(PluginSettings.State(
+            elasticAddress = tempAddr,
+            logsDirectory = tempLD,
+        ))
+
         super.doOKAction()
     }
 }
