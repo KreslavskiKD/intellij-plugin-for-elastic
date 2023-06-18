@@ -1,10 +1,7 @@
 package com.github.kreslavskikd.intellijpluginforelastic.dialogs
 
 import com.github.kreslavskikd.intellijpluginforelastic.PluginBundle
-import com.github.kreslavskikd.intellijpluginforelastic.repo.Constants
-import com.github.kreslavskikd.intellijpluginforelastic.repo.InfoRepo
-import com.github.kreslavskikd.intellijpluginforelastic.repo.QueryType
-import com.github.kreslavskikd.intellijpluginforelastic.repo.Settings
+import com.github.kreslavskikd.intellijpluginforelastic.repo.*
 import com.github.kreslavskikd.intellijpluginforelastic.services.ElasticProjectService
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
@@ -50,6 +47,16 @@ class QueryDialogWrapper(project: Project) : DialogWrapper(true) {
                 InfoRepo.query = queryBodyField.text
             }
         }
+
+        buttonsGroup ("Select how to save") {
+            row {
+                radioButton("In a scratch file", SavingLogsType.SCRATCH_FILE)
+            }
+            row {
+                radioButton("In logs directory", SavingLogsType.FILE_IN_DIR)
+            }
+        }.bind (MutableProperty({ Settings.savingLogsType }, { Settings.savingLogsType = it} ), SavingLogsType::class.java)
+
         row("Run Query") {
             button(PluginBundle.message("button_download_logs")){
 
@@ -75,7 +82,7 @@ class QueryDialogWrapper(project: Project) : DialogWrapper(true) {
             }
         }
         row("Status") {
-            cell(statusLabel)
+            cell(statusLabel).horizontalAlign(HorizontalAlign.FILL)
         }
     }
 

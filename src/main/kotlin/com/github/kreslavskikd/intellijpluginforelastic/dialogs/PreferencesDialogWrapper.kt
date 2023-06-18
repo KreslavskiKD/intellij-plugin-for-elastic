@@ -34,16 +34,6 @@ class PreferencesDialogWrapper(
                 .horizontalAlign(HorizontalAlign.RIGHT)
         }
 
-        buttonsGroup ("Select how to save") {
-            row {
-                radioButton("In a scratch file", SavingLogsType.SCRATCH_FILE)
-            }
-            row {
-                radioButton("In logs directory", SavingLogsType.FILE_IN_DIR)
-            }
-        }.bind (MutableProperty({ Settings.savingLogsType }, { Settings.savingLogsType = it} ), SavingLogsType::class.java)
-
-
         row("Output directory for logs") {
             cell(outputDirectoryField)
                 .horizontalAlign(HorizontalAlign.RIGHT)

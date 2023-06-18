@@ -26,9 +26,6 @@
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow
-                factoryClass="com.github.kreslavskikd.intellijpluginforelastic.toolWindow.ElasticToolWindowFactory"
-                id="ElasticToolWindow"/>
         <notificationGroup
                 id="Elastic-plugin group"
                 displayType="BALLOON"/>

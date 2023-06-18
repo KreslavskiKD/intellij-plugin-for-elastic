@@ -29,18 +29,38 @@ import com.intellij.util.ArrayUtil
 import com.intellij.util.Consumer
 import org.jetbrains.annotations.NotNull
 import java.io.File
+import java.nio.charset.StandardCharsets
+import java.nio.file.Files
+import java.nio.file.Paths
+
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.io.path.ExperimentalPathApi
+import kotlin.io.path.absolutePathString
 
 class ShowQueryDialogAction : AnAction() {
+
+    @OptIn(ExperimentalPathApi::class)
     override fun actionPerformed(e: AnActionEvent) {
         val dialog = QueryDialogWrapper(e.project!!)
         dialog.showAndGet()
 
         if (Settings.savingLogsType == SavingLogsType.FILE_IN_DIR) {
             File(InfoRepo.logsDir).mkdirs()
-            val outputFile = File("${InfoRepo.logsDir}/data.log")
-            outputFile.writeText(InfoRepo.lastResult)
-            thisLogger().info("data logs stored to: " + outputFile.absolutePath)
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")
+            val current = LocalDateTime.now().format(formatter)
+            val rootPath = Paths.get("/").toAbsolutePath()
+            val directoryPath = Paths.get(e.project!!.basePath + File.separator + InfoRepo.logsDir).normalize()
+            thisLogger().info("directoryPath: " + directoryPath)
+            if (Files.notExists(rootPath.resolve(directoryPath))) {
+                Files.createDirectory(rootPath.resolve(directoryPath))
+            }
+            val outputFile = Paths.get(e.project!!.basePath + File.separator + InfoRepo.logsDir + File.separator + "elastic-$current-data.log").normalize()
+            thisLogger().info("directoryPath: " + outputFile)
+            Files.createFile(outputFile)
+            Files.write(outputFile, InfoRepo.lastResult.toByteArray(StandardCharsets.UTF_8))
+            thisLogger().info("data logs stored to: " + outputFile.absolutePathString())
         } else if (Settings.savingLogsType == SavingLogsType.SCRATCH_FILE) {
 
             val project = e.project ?: return
@@ -70,7 +90,7 @@ class ShowQueryDialogAction : AnAction() {
     fun createContext(e: AnActionEvent, project: Project): ScratchFileCreationHelper.Context {
         val context = ScratchFileCreationHelper.Context()
         context.text = StringUtil.notNullize(InfoRepo.lastResult)
-        // todo fix
+
         if (context.text.isNotEmpty()) {
             context.language = LogLanguage
         }
@@ -92,7 +112,9 @@ class ShowQueryDialogAction : AnAction() {
         val relativePath = (if (rootType !== ScratchRootType.getInstance()) "" else FileUtil.getRelativePath(
             ScratchFileService.getInstance().getRootPath(rootType), dir!!.path, '/'
         ))!!
-        val fileName = (if (StringUtil.isEmpty(relativePath)) "" else "$relativePath/") + "logsFromKibana.log"
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")
+        val current = LocalDateTime.now().format(formatter)
+        val fileName = (if (StringUtil.isEmpty(relativePath)) "" else "$relativePath/") + "elastic-$current-data.log"
         val file = ScratchRootType.getInstance().createScratchFile(
             project, fileName, language, context.text, context.createOption
         )
