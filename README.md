@@ -8,7 +8,7 @@
 <!-- Plugin description -->
 ## What does it do
 Provides a possibility to download logs from Elasticsearch
-- To set up preferences such as your Elastic address go to File -> Settings -> Tools -> Elastic Logs Downloader
+- To set up preferences such as your Elastic address go to <kbd>File</kbd> -> <kbd>Settings/Preferences</kbd> -> <kbd>Tools</kbd> -> <kbd>Elastic Logs Downloader</kbd>
 - Or you can use an action "Set Up Elastic Preferences"
 - To set up and run query select an action "Set up and Run Elastic Query" 
 You can also just create a blank log scratch file via "Open Log File" action
@@ -29,12 +29,7 @@ You can also just create a blank log scratch file via "Open Log File" action
   
 - Manually:
 
-  Download the [latest release](https://github.com/KreslavskiKD/intellij-plugin-for-elastic/releases/latest) and install it manually using
+  Download the the code, build it via buildPlugin gradle action and install it manually using
   <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
 
----
-Plugin based on the [IntelliJ Platform Plugin Template][template].
-
-[template]: https://github.com/JetBrains/intellij-platform-plugin-template
-[docs:plugin-description]: https://plugins.jetbrains.com/docs/intellij/plugin-user-experience.html#plugin-description-and-presentation
